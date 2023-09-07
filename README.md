@@ -1,86 +1,67 @@
 # Grocery-Cart-Synergies
 Unveiling Hidden Associations with Market Basket Analysis
-Certainly! Here's a GitHub `README.md` formatted version of the final analysis:
 
----
+----
 
-# Market Basket Analysis (MBA) Project
+## Market Basket Analysis with Groceries Dataset
 
-## Objective
+### Objective:
+The primary objective of this analysis is to uncover associations between different items in the groceries dataset using Market Basket Analysis (MBA). By identifying these associations, businesses can strategize their marketing efforts, optimize their product placements, and potentially increase sales.
 
-To uncover associations between items in a grocery dataset and provide insights into potential product bundling or placement strategies.
-
-## Dataset
-
-The dataset used for this analysis is the "groceries - groceries.csv" file, which contains transactional data from a grocery store. Each row represents a transaction, and the items purchased in that transaction are listed.
-
-[Link to Dataset](https://app.noteable.io/p/ff43fb9d-b304-4683-a757-7aa1eab999c6/MBA-Projectv1)
-
-## Steps
-
-### 1. Data Loading
-
-The dataset was loaded into a pandas DataFrame using the `read_csv` function.
+### Data Loading:
+The dataset used for this analysis is the "groceries - groceries.csv" file. It contains transactional data representing items purchased together in a single transaction.
 
 ```python
-import pandas as pd
-
-data = pd.read_csv('groceries - groceries.csv')
+data = pd.read_csv('groceries - groceries.csv', header=None)
 ```
 
-### 2. Data Preprocessing
-
-The data was preprocessed to transform it into a format suitable for association rule mining. Transactions were extracted, and a one-hot encoded matrix was created.
+### Data Preprocessing:
+The data was preprocessed to convert it into a list of transactions, where each transaction is a list of items.
 
 ```python
-transactions = data.values.tolist()
-transactions = [list(filter(lambda x: str(x) != 'nan', transaction)) for transaction in transactions]
+transactions = []
+for i in range(0, len(data)):
+    transactions.append([str(data.values[i, j]) for j in range(0, 20) if pd.notna(data.values[i, j])])
 ```
 
-### 3. Frequent Itemset Generation
-
-The Apriori algorithm was used to generate frequent itemsets. The `mlxtend` library was utilized for this purpose.
+### Frequent Itemset Generation:
+Using the `apriori` algorithm, frequent itemsets were generated with a minimum support threshold of 0.01.
 
 ```python
-from mlxtend.preprocessing import TransactionEncoder
 from mlxtend.frequent_patterns import apriori
-
-te = TransactionEncoder()
-te_ary = te.fit(transactions).transform(transactions)
-df = pd.DataFrame(te_ary, columns=te.columns_)
 frequent_itemsets = apriori(df, min_support=0.01, use_colnames=True)
 ```
 
-### 4. Association Rule Mining
-
-Association rules were generated using the `association_rules` function from the `mlxtend` library.
+### Association Rule Mining:
+Association rules were derived from the frequent itemsets. The metric used for evaluation was 'lift', and a minimum threshold of 1 was set.
 
 ```python
 from mlxtend.frequent_patterns import association_rules
-
-rules = association_rules(frequent_itemsets, metric="lift", min_threshold=1)
+rules = association_rules(frequent_itemsets, metric='lift', min_threshold=1)
 ```
 
-### 5. Visualizations
+### Visualizations:
+A scatter plot was generated to visualize the association rules based on Support vs Confidence, with the color intensity representing the lift value.
 
-Visualizations were generated using the `matplotlib` and `seaborn` libraries to provide insights into the association rules. These visualizations included:
+```python
+plt.figure(figsize=(12, 8))
+plt.scatter(filtered_rules['support'], filtered_rules['confidence'], c=filtered_rules['lift'], cmap='YlGnBu', s=100)
+plt.colorbar(label='Lift')
+plt.xlabel('Support')
+plt.ylabel('Confidence')
+plt.title('Association Rules - Support vs Confidence')
+plt.show()
+```
 
-- A scatter plot of support vs confidence
-- A heatmap of item pairs and their corresponding lift values
+![Association Rules - Support vs Confidence](https://chat.noteable.io/origami/o/99e82694745e4153b62a30b56301ed53.png)
 
-### 6. Final Insights and Recommendations
+### Final Insights and Recommendations:
+The scatter plot provides insights into the relationships between different items. Items with higher support and confidence values are more frequently bought together, and the lift value indicates the strength of that relationship.
 
-Based on the association rules and visualizations:
+Businesses can leverage these insights to:
+- Bundle products that are frequently bought together.
+- Offer discounts on complementary products.
+- Optimize the placement of products in stores to encourage cross-selling.
 
-- Certain items are frequently bought together, indicating potential for product bundling or co-marketing strategies.
-- The placement of items in the store can be optimized based on the association rules to encourage cross-selling.
-- Discounts or promotions can be offered on items that have strong associations to drive sales.
-
-## Sources
-
+### Sources:
 - Dataset: [groceries - groceries.csv](https://app.noteable.io/p/ff43fb9d-b304-4683-a757-7aa1eab999c6/MBA-Projectv1)
-- [mlxtend library documentation](http://rasbt.github.io/mlxtend/)
-
----
-
-You can use the above markdown content to create a `README.md` file for your GitHub repository. This provides a clear and concise overview of the Market Basket Analysis project, the steps taken, and the insights derived from the analysis.

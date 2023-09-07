@@ -3,7 +3,7 @@ Unveiling Hidden Associations with Market Basket Analysis
 
 ----
 
-## Market Basket Analysis with Groceries Dataset
+## Market Basket Analysis with [Groceries Market Basket Dataset](https://www.kaggle.com/datasets/irfanasrullah/groceries)
 
 ### Objective:
 The primary objective of this analysis is to uncover associations between different items in the groceries dataset using Market Basket Analysis (MBA). By identifying these associations, businesses can strategize their marketing efforts, optimize their product placements, and potentially increase sales.
@@ -64,4 +64,4 @@ Businesses can leverage these insights to:
 - Optimize the placement of products in stores to encourage cross-selling.
 
 ### Sources:
-- Dataset: [groceries - groceries.csv](https://app.noteable.io/p/ff43fb9d-b304-4683-a757-7aa1eab999c6/MBA-Projectv1)
+- Dataset: [Groceries Market Basket Dataset](https://www.kaggle.com/datasets/irfanasrullah/groceries)
